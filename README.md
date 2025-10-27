@@ -38,25 +38,25 @@ Before installation, ensure you have:
 
 ## 🔧 Installation 
 
-## 1. Clone the repository
+### 1. Clone the repository
 ```php
 git clone https://github.com/Shakil7979/course-builder.git
 cd course-builder
 ```
 
 
-## 2. Install PHP dependencies
+### 2. Install PHP dependencies
 ```php
 composer install
 ```
 
-## 3. Setup environment
+### 3. Setup environment
 ```php
 cp .env.example .env
 php artisan key:generate
 ```
 
-## 4. Configure database
+### 4. Configure database
 ```php
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -66,17 +66,17 @@ DB_USERNAME=your_username
 DB_PASSWORD=your_password
 ```
 
-## 5. Run migrations
+### 5. Run migrations
 ```php
 php artisan migrate
 ```
 
-## 6. Start development server
+### 6. Start development server
 ```php
 php artisan serve
 ```
 
-## 7. Access application
+### 7. Access application
 ```php
 http://localhost:8000
 ```

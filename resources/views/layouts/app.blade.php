@@ -13,9 +13,8 @@
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <i class="fas fa-graduation-cap"></i>
+            <div class="sidebar-header mx-auto">
+                <div class="logo"> 
                     <span class="logo-text">CourseBuilder</span>
                 </div>
                 <button class="sidebar-close" id="sidebarClose">
@@ -51,19 +50,7 @@
                         </a>
                     </li>
                 </ul>
-            </nav>
-            
-            <div class="sidebar-footer">
-                <div class="user-profile">
-                    <div class="user-avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="user-info">
-                        <span class="user-name">John Doe</span>
-                        <span class="user-role">Administrator</span>
-                    </div>
-                </div>
-            </div>
+            </nav> 
         </aside>
 
         <!-- Main Content -->
@@ -80,16 +67,7 @@
                 </div>
                 
                 <div class="top-bar-right">
-                    <div class="top-bar-actions">
-                        <button class="theme-toggle" id="themeToggle">
-                            <i class="fas fa-moon"></i>
-                        </button>
-                        <div class="notification-dropdown">
-                            <button class="notification-btn">
-                                <i class="fas fa-bell"></i>
-                                <span class="notification-badge">3</span>
-                            </button>
-                        </div>
+                    <div class="top-bar-actions"> 
                         <div class="user-dropdown">
                             <button class="user-btn">
                                 <div class="user-avatar-sm">
@@ -97,19 +75,7 @@
                                 </div>
                                 <span class="user-name-sm">John Doe</span>
                                 <i class="fas fa-chevron-down"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a href="#" class="dropdown-item">
-                                    <i class="fas fa-user"></i> Profile
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                    <i class="fas fa-cog"></i> Settings
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a href="#" class="dropdown-item">
-                                    <i class="fas fa-sign-out-alt"></i> Logout
-                                </a>
-                            </div>
+                            </button> 
                         </div>
                     </div>
                 </div>

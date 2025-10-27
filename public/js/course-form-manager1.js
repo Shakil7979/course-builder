@@ -1,6 +1,6 @@
 class CourseFormManager {
     constructor() {
-        this.modules = [];
+        this.modules = []; // Array to store module data
         this.selectors = {
             modulesContainer: '#modulesContainer',
             moduleTemplate: '#moduleTemplate',
@@ -15,7 +15,7 @@ class CourseFormManager {
 
     init() {
         this.bindEvents();
-        this.addModule();
+        this.addModule(); // Initialize first module
     }
 
     bindEvents() {
@@ -26,6 +26,7 @@ class CourseFormManager {
         $(document).on('change', '.content-type', (e) => this.handleContentTypeChange(e));
         $(this.selectors.courseForm).on('submit', (e) => this.handleFormSubmit(e));
         $(this.selectors.resetForm).on('click', () => this.resetForm());
+        
     }
 
     addModule() {
@@ -33,9 +34,12 @@ class CourseFormManager {
         const template = $(this.selectors.moduleTemplate).html();
         const $module = $(template);
         
+        // Set data attributes
         $module.attr('data-module-index', moduleIndex);
+        
         $(this.selectors.modulesContainer).append($module);
         
+        // Initialize module in array
         this.modules.push({
             element: $module,
             contents: []
@@ -50,8 +54,13 @@ class CourseFormManager {
             const $module = $(event.target).closest('.module-card');
             const moduleIndex = parseInt($module.attr('data-module-index'));
             
+            // Remove from array
             this.modules.splice(moduleIndex, 1);
+            
+            // Remove from DOM
             $module.remove();
+            
+            // Reindex all modules
             this.reindexModules();
         } else {
             alert('At least one module is required.');
@@ -70,9 +79,12 @@ class CourseFormManager {
         const template = $(this.selectors.contentTemplate).html();
         const $content = $(template);
         
+        // Set data attributes
         $content.attr('data-content-index', contentIndex);
+        
         module.element.find('.contents-container').append($content);
         
+        // Add to array
         module.contents.push({
             element: $content
         });
@@ -89,8 +101,13 @@ class CourseFormManager {
         if (module.contents.length > 1) {
             const contentIndex = parseInt($content.attr('data-content-index'));
             
+            // Remove from array
             module.contents.splice(contentIndex, 1);
+            
+            // Remove from DOM
             $content.remove();
+            
+            // Reindex contents in this module
             this.reindexModuleContents(moduleIndex);
         } else {
             alert('At least one content item is required per module.');
@@ -102,15 +119,19 @@ class CourseFormManager {
             const $module = $(element);
             const oldIndex = parseInt($module.attr('data-module-index'));
             
+            // Update data attribute
             $module.attr('data-module-index', index);
             
+            // Update array reference
             if (index !== oldIndex) {
                 this.modules[index] = this.modules[oldIndex];
             }
             
+            // Update display numbers and input names
             this.updateModuleDisplay(index);
         });
         
+        // Trim array to current length
         this.modules = this.modules.slice(0, $(`${this.selectors.modulesContainer} .module-card`).length);
     }
 
@@ -121,15 +142,19 @@ class CourseFormManager {
             const $content = $(element);
             const oldIndex = parseInt($content.attr('data-content-index'));
             
+            // Update data attribute
             $content.attr('data-content-index', index);
             
+            // Update array reference
             if (index !== oldIndex) {
                 module.contents[index] = module.contents[oldIndex];
             }
             
+            // Update display numbers and input names
             this.updateContentDisplay(moduleIndex, index, $content);
         });
         
+        // Trim array to current length
         module.contents = module.contents.slice(0, module.element.find('.content-item').length);
     }
 
@@ -143,10 +168,14 @@ class CourseFormManager {
         const module = this.modules[moduleIndex];
         const $module = module.element;
         
+        // Update display number
         $module.find('.module-number').text(moduleIndex + 1);
+        
+        // Update module input names
         $module.find('.module-title-input').attr('name', `modules[${moduleIndex}][title]`);
         $module.find('.module-description-input').attr('name', `modules[${moduleIndex}][description]`);
         
+        // Update all content input names in this module
         this.updateContentNumbers(moduleIndex);
     }
 
@@ -159,7 +188,10 @@ class CourseFormManager {
     }
 
     updateContentDisplay(moduleIndex, contentIndex, $content) {
+        // Update display number
         $content.find('.content-number').text(contentIndex + 1);
+        
+        // Update input names with correct indexes
         $content.find('.content-type').attr('name', `modules[${moduleIndex}][contents][${contentIndex}][type]`);
         $content.find('.content-value').attr('name', `modules[${moduleIndex}][contents][${contentIndex}][content]`);
         $content.find('.content-file').attr('name', `modules[${moduleIndex}][contents][${contentIndex}][file]`);
@@ -179,93 +211,14 @@ class CourseFormManager {
         }
     }
 
-    // ==========================
-    // 🧠 FORM VALIDATION
-    // ==========================
-    validateForm() {
-        this.clearValidationErrors();
-        let hasError = false;
-
-        const title = $('#courseTitle').val().trim();
-        const category = $('#courseCategory').val().trim();
-        const description = $('#courseDescription').val().trim();
-        const featureVideo = $('#feature_video').val().trim();
-
-        if (title === '') {
-            $('#courseTitle').addClass('is-invalid').next('.invalid-feedback').text('Course title is required.');
-            hasError = true;
-        }
-
-        if (category === '') {
-            $('#courseCategory').addClass('is-invalid').next('.invalid-feedback').text('Please select a category.');
-            hasError = true;
-        }
-
-        if (description === '') {
-            $('#courseDescription').addClass('is-invalid').next('.invalid-feedback').text('Description is required.');
-            hasError = true;
-        }
-
-        if (featureVideo === '') {
-            $('#feature_video').addClass('is-invalid');
-            $('#feature_video_error').text('Feature video is required.').show();
-            hasError = true;
-        }
-
-        // Validate modules
-        this.modules.forEach((module, i) => {
-            const title = module.element.find('.module-title-input').val().trim();
-            if (title === '') {
-                module.element.find('.module-title-input').addClass('is-invalid')
-                    .next('.invalid-feedback').text('Module title is required.');
-                hasError = true;
-            }
-
-            // Validate contents
-            module.contents.forEach((content) => {
-                const type = content.element.find('.content-type').val().trim();
-                const value = content.element.find('.content-value').val().trim();
-                const file = content.element.find('.content-file')[0]?.files[0];
-                
-                if (type === '') {
-                    content.element.find('.content-type').addClass('is-invalid')
-                        .next('.invalid-feedback').text('Select content type.');
-                    hasError = true;
-                }
-                
-                if (type === 'video' || type === 'image') {
-                    if (!file) {
-                        content.element.find('.content-file').addClass('is-invalid')
-                            .next('.invalid-feedback').text(`${type.charAt(0).toUpperCase() + type.slice(1)} file is required.`);
-                        hasError = true;
-                    }
-                } else if (value === '') {
-                    content.element.find('.content-value').addClass('is-invalid')
-                        .next('.invalid-feedback').text('Content cannot be empty.');
-                    hasError = true;
-                }
-            });
-        });
-
-        return !hasError;
-    }
 
     handleFormSubmit(event) {
         event.preventDefault();
-        
-        if (!this.validateForm()) {
-            this.showAlert('danger', 'Please fix the validation errors before submitting.');
-            return;
-        }
-        
         this.submitForm();
     }
 
     submitForm() {
         const formData = new FormData($(this.selectors.courseForm)[0]);
-        
-        // Add modules data to FormData
-        this.addModulesToFormData(formData);
         
         $('button[type="submit"]').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating...');
 
@@ -278,52 +231,21 @@ class CourseFormManager {
             success: (response) => {
                 this.showAlert('success', response.message);
                 this.resetSubmitButton();
-                this.resetFormAfterSuccess();
             },
             error: (xhr) => {
                 this.resetSubmitButton();
                 
                 if (xhr.status === 422) {
-                    this.showErrorPopup(xhr.responseJSON.errors);
+                    // this.handleValidationErrors(xhr.responseJSON.errors);
+                    this.showErrorPopup(xhr.responseJSON.errors)
                 } else {
                     this.showAlert('danger', 'An error occurred while creating the course. Please try again.');
-                    console.error('Error:', xhr.responseText);
                 }
             }
         });
     }
 
-    addModulesToFormData(formData) {
-        this.modules.forEach((module, moduleIndex) => {
-            const moduleTitle = module.element.find('.module-title-input').val().trim();
-            const moduleDescription = module.element.find('.module-description-input').val().trim();
-            
-            formData.append(`modules[${moduleIndex}][title]`, moduleTitle);
-            formData.append(`modules[${moduleIndex}][description]`, moduleDescription);
-            
-            module.contents.forEach((content, contentIndex) => {
-                const contentType = content.element.find('.content-type').val().trim();
-                const contentValue = content.element.find('.content-value').val().trim();
-                const contentFile = content.element.find('.content-file')[0]?.files[0];
-                
-                formData.append(`modules[${moduleIndex}][contents][${contentIndex}][type]`, contentType);
-                formData.append(`modules[${moduleIndex}][contents][${contentIndex}][content]`, contentValue);
-                
-                if (contentFile) {
-                    formData.append(`modules[${moduleIndex}][contents][${contentIndex}][file]`, contentFile);
-                }
-            });
-        });
-    }
 
-    resetFormAfterSuccess() {
-        $(this.selectors.modulesContainer).empty();
-        this.modules = [];
-        this.addModule();
-        $(this.selectors.courseForm)[0].reset();
-        this.clearValidationErrors();
-        $('.alert').alert('close');
-    }
 
     resetSubmitButton() {
         $('button[type="submit"]').prop('disabled', false).text('Create Course');
@@ -332,32 +254,39 @@ class CourseFormManager {
     showErrorPopup(errors) {
         let errorMessages = [];
         
+        // Collect all error messages
         $.each(errors, (field, messages) => {
             errorMessages = errorMessages.concat(messages);
         });
         
+        // Create alert message
         const errorHTML = `
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <h5 class="alert-heading">Please fix the following errors:</h5>
                 <ul class="mb-0">
                     ${errorMessages.map(msg => `<li>${msg}</li>`).join('')}
                 </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                
             </div>
         `;
         
+        // Remove existing alerts
         $('.alert-danger').remove();
+        
+        // Prepend to form
         $(this.selectors.courseForm).prepend(errorHTML);
         
+        // Scroll to top
         $('html, body').animate({
             scrollTop: 0
         }, 500);
     }
 
+
+   
     clearValidationErrors() {
         $('.is-invalid').removeClass('is-invalid');
         $('.invalid-feedback').text('');
-        $('#feature_video_error').text('').hide();
     }
 
     resetForm() {
@@ -383,6 +312,7 @@ class CourseFormManager {
         }, 5000);
     }
 
+    // Utility method to get module data
     getModuleData() {
         return this.modules.map((module, moduleIndex) => {
             return {

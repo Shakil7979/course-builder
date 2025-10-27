@@ -186,7 +186,7 @@
 
 @endsection
 
-@push('scripts')
+@push('scripts') 
     <script src="{{ asset('js/course-form-manager.js') }}"></script>
     <script>
         // Initialize the class when document is ready

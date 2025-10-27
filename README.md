@@ -50,13 +50,13 @@ cd course-builder
 composer install
 ```
 
-4. Setup environment
+## 3. Setup environment
 ```php
 cp .env.example .env
 php artisan key:generate
 ```
 
-6. Configure database
+## 4. Configure database
 ```php
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -66,17 +66,17 @@ DB_USERNAME=your_username
 DB_PASSWORD=your_password
 ```
 
-7. Run migrations
+## 5. Run migrations
 ```php
 php artisan migrate
 ```
 
-8. Start development server
+## 6. Start development server
 ```php
 php artisan serve
 ```
 
-9. Access application
+## 7. Access application
 ```php
 http://localhost:8000
 ```

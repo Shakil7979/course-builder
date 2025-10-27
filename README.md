@@ -38,11 +38,14 @@ Before installation, ensure you have:
 
 ## 🔧 Installation
 
+## 🔧 Installation
+
 ### 1. Clone the Repository
-```bash
 git clone https://github.com/Shakil7979/course-builder.git
 cd course-builder
 
-###  2. Install PHP Dependencies
-```bash
+
+
+### 2. Install PHP Dependencies 
 composer install
+

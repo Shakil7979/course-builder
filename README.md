@@ -36,16 +36,9 @@ Before installation, ensure you have:
 - Composer
 - MySQL Database 
 
-## 🔧 Installation
+## 🔧 Installation 
 
-## 🔧 Installation
-
-### 1. Clone the Repository
+1. **Clone the Repository**
 git clone https://github.com/Shakil7979/course-builder.git
 cd course-builder
-
-
-
-### 2. Install PHP Dependencies 
-composer install
 

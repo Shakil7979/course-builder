@@ -42,3 +42,7 @@ Before installation, ensure you have:
 ```bash
 git clone https://github.com/Shakil7979/course-builder.git
 cd course-builder
+
+###  2. Install PHP Dependencies
+```bash
+composer install

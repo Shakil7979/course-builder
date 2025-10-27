@@ -1499,3 +1499,7 @@ body {
     text-overflow: ellipsis;
     max-width: 100%;
 }
+
+.breadcrumb {
+    margin: 0;
+}
